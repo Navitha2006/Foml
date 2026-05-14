@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Complete Payment</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container narrow">
+        <div class="center-card">
+            <div class="payment-title">Complete Your Payment</div>
+            <form method="POST" class="form" id="paymentForm">
+                <div style="margin-bottom:18px;text-align:center;">
+                    {% set display_price = booking.predicted_price if booking.predicted_price is defined and booking.predicted_price else booking.amount %}
+                    <label style="display:block;font-weight:700;margin-bottom:8px;">Predicted price</label>
+                    <div style="font-size:1.6rem;font-weight:800;color:var(--red);background:#fff0f1;padding:12px;border-radius:10px;display:inline-block;min-width:160px;">₹ {{ display_price }}</div>
+                </div>
+
+                <label for="account_number">Account Number:</label>
+                <input type="text" id="account_number" name="account_number" required><br>
+
+                <label for="user_name">User Name:</label>
+                <input type="text" id="user_name" name="user_name" required><br>
+
+                <label for="upi_transaction">UPI Transaction ID:</label>
+                <input type="text" id="upi_transaction" name="upi_transaction" required><br>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">Confirm Payment</button>
+                    <a href="/" class="btn btn-outline">Back</a>
+                </div>
+            </form>
+            <div id="successMsg" class="muted" style="display:none;margin-top:18px;font-size:1.1rem;"></div>
+        </div>
+    </div>
+    <style>
+        .center-card {
+            max-width: 420px;
+            margin: 48px auto;
+            background: var(--card);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 32px 28px;
+            text-align: center;
+        }
+        .payment-title {
+            color: var(--red);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+        .form label {
+            text-align: left;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 24px;
+        }
+    </style>
+    <script>
+        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            this.submit();
+            setTimeout(function(){
+                document.getElementById('successMsg').textContent = 'Payment Successful!';
+                document.getElementById('successMsg').style.display = 'block';
+            }, 400);
+        });
+    </script>
+</body>
+</html>

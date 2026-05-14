@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>InnoStay – Search & Predict</title>
+	<link rel="stylesheet" href="/static/css/style.css?v=1">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+	<header class="header">
+		<div class="brand">InnoStay</div>
+		<nav class="nav">
+			<a href="/logout" class="link">Logout</a>
+			<a href="/user_details" class="link">User Details</a>
+			<a href="/settings" class="link">Settings</a>
+		</nav>
+	</header>
+
+	<main class="container">
+		<section class="card">
+			<h1 class="title">Hotel Search & Price Prediction</h1>
+			<form id="searchForm" class="form grid-4">
+				<div>
+					<label>City</label>
+					<select name="city">
+						<option>Mumbai</option>
+						<option>Delhi</option>
+						<option>Bangalore</option>
+						<option>Hyderabad</option>
+						<option>Chennai</option>
+						<option>Pune</option>
+						<option>Kolkata</option>
+						<option>Goa</option>
+						<option>Mysore</option>
+						<option>Pondicherry</option>
+					</select>
+				</div>
+				<div>
+					<label>Star Rating</label>
+					<input type="number" name="star_rating" value="4" min="1" max="5" step="0.1">
+				</div>
+				<div>
+					<label>Guests</label>
+					<input type="number" name="guests" value="2" min="1" max="8">
+				</div>
+				<div>
+					<label>Nights</label>
+					<input type="number" name="nights" value="1" min="1" max="30">
+				</div>
+				<div>
+					<label>Check-in Date</label>
+					<input type="date" name="checkin">
+				</div>
+				<div>
+					<label>Check-in Month</label>
+					<select name="checkin_month">
+						<option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option>
+						<option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option>
+						<option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option>
+						<option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
+					</select>
+				</div>
+				<div>
+					<label>Room Type</label>
+					<select name="room_type">
+						<option>Standard</option>
+						<option>Deluxe</option>
+						<option>Suite</option>
+						<option>Family</option>
+						<option>Connecting Room</option>
+						<option>Villa</option>
+						<option>Executive</option>
+						<option>Presidential Room</option>
+					</select>
+				</div>
+				<div>
+					<label>Hotel Type</label>
+					<select name="hotel_type">
+						<option>Veg</option>
+						<option>Non-Veg</option>
+					</select>
+				</div>
+
+				<div class="full">
+					<label>Amenities</label>
+					<div class="amenities toggle-group" id="amenityToggles">
+						<button type="button" class="toggle" data-key="ac" aria-pressed="false">AC</button>
+						<button type="button" class="toggle" data-key="bar" aria-pressed="false">Bar</button>
+						<button type="button" class="toggle" data-key="breakfast" aria-pressed="false">Breakfast</button>
+						<button type="button" class="toggle" data-key="gym" aria-pressed="false">Gym</button>
+						<button type="button" class="toggle" data-key="parking" aria-pressed="false">Parking</button>
+						<button type="button" class="toggle" data-key="pool" aria-pressed="false">Pool</button>
+						<button type="button" class="toggle" data-key="room_service" aria-pressed="false">Room Service</button>
+						<button type="button" class="toggle" data-key="spa" aria-pressed="false">Spa</button>
+						<button type="button" class="toggle" data-key="wifi" aria-pressed="false">WiFi</button>
+					</div>
+				</div>
+				<div class="full align-end">
+					<button class="btn btn-primary" id="predictBtn" type="button">Predict Price</button>
+				</div>
+			</form>
+		</section>
+
+		<section id="result" class="card hidden"></section>
+		<section id="hotels" class="grid-cards"></section>
+	</main>
+
+	<footer class="footer">Created by [Neha, Nandika] – Foundation of AI Project.</footer>
+
+	<script src="/static/js/main.js?v=1"></script>
+</body>
+</html>
+
+

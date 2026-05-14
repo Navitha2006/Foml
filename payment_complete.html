@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Complete</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container narrow">
+        <div class="center-card">
+            <div class="payment-title">Payment Successful!</div>
+            <p>Your payment for booking <strong>{{ booking.booking_id }}</strong> is complete.</p>
+            {% set display_price = booking.predicted_price if booking.predicted_price is defined and booking.predicted_price else booking.amount %}
+            <p style="font-size:1.1rem;font-weight:800;color:var(--red);margin:6px 0;">Predicted price: ₹ {{ display_price }}</p>
+            <ul style="list-style:none;padding:0;margin:18px 0 24px 0;text-align:left;">
+                <li><strong>Account Number:</strong> {{ booking.payment.account_number }}</li>
+                <li><strong>User Name:</strong> {{ booking.payment.user_name }}</li>
+                <li><strong>UPI Transaction ID:</strong> {{ booking.payment.upi_transaction }}</li>
+                <li><strong>Status:</strong> <span style="color:var(--red);font-weight:600;">{{ booking.payment.status }}</span></li>
+            </ul>
+            <a href="/" class="btn btn-outline">Back to Home</a>
+        </div>
+    </div>
+    <style>
+        .center-card {
+            max-width: 420px;
+            margin: 48px auto;
+            background: var(--card);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 32px 28px;
+            text-align: center;
+        }
+        .payment-title {
+            color: var(--red);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+    </style>
+</body>
+</html>

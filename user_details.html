@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>InnoStay – Your Details</title>
+	<link rel="stylesheet" href="/static/css/style.css?v=1">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+	<header class="header">
+		<div class="brand">InnoStay</div>
+		<nav class="nav">
+			<a href="/logout" class="link">Logout</a>
+			<a href="/settings" class="link">Settings</a>
+		</nav>
+	</header>
+
+	<main class="container narrow">
+		<section class="card">
+			<h1 class="title">Your Details</h1>
+			<form method="POST" class="form grid-2">
+				<div>
+					<label>Name</label>
+					<input type="text" name="name" value="{{ (user.name if user else '') or '' }}" placeholder="Your name" required>
+				</div>
+				<div>
+					<label>Mobile Number</label>
+					<input type="tel" name="mobile" value="{{ (user.mobile if user and user.mobile else '') or '' }}" placeholder="e.g., 9876543210" pattern="[0-9]{10}" required>
+				</div>
+				<div>
+					<label>Gender</label>
+					<select name="gender">
+						<option value="">Select</option>
+						<option value="male" {% if user and user.gender=='male' %}selected{% endif %}>Male</option>
+						<option value="female" {% if user and user.gender=='female' %}selected{% endif %}>Female</option>
+						<option value="other" {% if user and user.gender=='other' %}selected{% endif %}>Other</option>
+					</select>
+				</div>
+				<div>
+					<label>Pincode</label>
+					<input type="text" name="pincode" value="{{ (user.pincode if user and user.pincode else '') or '' }}" pattern="[0-9]{6}" placeholder="e.g., 400001">
+				</div>
+				<div class="full">
+					<label>Address</label>
+					<textarea name="address" rows="3" placeholder="Street, Area">{{ (user.address if user and user.address else '') or '' }}</textarea>
+				</div>
+				<div class="align-end">
+					<button class="btn btn-primary" type="submit">Continue to Search</button>
+				</div>
+			</form>
+		</section>
+	</main>
+
+	<footer class="footer">Created by [Neha, Nandika] – Foundation of AI Project.</footer>
+</body>
+</html>
+
+

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Profile – InnoStay</title>
+	<link rel="stylesheet" href="/static/css/style.css?v=1">
+</head>
+<body>
+	<header class="header">
+		<div class="brand">InnoStay</div>
+		<nav class="nav">
+			<a href="/logout" class="link">Logout</a>
+			<a href="/user_details" class="link">User Details</a>
+		</nav>
+	</header>
+
+	<main class="container narrow">
+		<section class="card">
+			<h1 class="title">Your Profile</h1>
+			<div class="grid-2">
+				<div>
+					<label>Email</label>
+					<div class="muted">{{ user.email or '—' }}</div>
+					<label>Name</label>
+					<div class="muted">{{ user.name or '—' }}</div>
+					<label>Gender</label>
+					<div class="muted">{{ user.gender or '—' }}</div>
+				</div>
+				<div>
+					<label>Mobile</label>
+					<div class="muted">{{ user.mobile or '—' }}</div>
+					<label>Address</label>
+					<div class="muted">{{ user.address or '—' }}</div>
+					<label>Pincode</label>
+					<div class="muted">{{ user.pincode or '—' }}</div>
+				</div>
+			</div>
+			<div style="margin-top:18px;text-align:right;">
+				<a class="btn btn-outline" href="/user_details">Edit Details</a>
+			</div>
+		</section>
+	</main>
+
+	<footer class="footer">Created by [Neha, Nandika] – Foundation of AI Project.</footer>
+</body>
+</html>

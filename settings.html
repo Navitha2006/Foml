@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>⚙️ Settings – InnoStay</title>
+	<link rel="stylesheet" href="/static/css/style.css?v=1">
+	<style>
+		.section-row { display: grid; grid-template-columns: 1fr 360px; gap: 16px; }
+		.panel { background:var(--card); border-radius:12px; padding:18px; box-shadow:var(--shadow); margin-bottom:16px; }
+		.panel h2 { margin:0 0 12px 0; color:var(--dark-red); }
+		.field { margin-bottom:10px; }
+		.muted-small { color:var(--muted); font-size:13px; }
+		.notify-toggle { display:flex; align-items:center; justify-content:space-between; padding:8px 0; }
+	</style>
+</head>
+<body class="{{ 'dark' if theme=='dark' else '' }}">
+	<header class="header">
+		<div class="brand">InnoStay</div>
+		<nav class="nav">
+			<a href="/logout" class="link">Logout</a>
+			<a href="/user_details" class="link">User Details</a>
+			<a href="/search" class="link">Search</a>
+			<a href="/about" class="link">About</a>
+			<a href="/contact" class="link">Contact</a>
+		</nav>
+	</header>
+
+	<main class="container">
+		<h1 style="margin-top:18px;">⚙️ Settings</h1>
+
+		<div class="section-row">
+			<div>
+				<div class="panel">
+					<h2>Profile Settings</h2>
+					<form method="POST" action="/settings" class="form">
+						<div class="grid-2">
+							<div class="field">
+								<label>Name</label>
+								<input name="name" value="{{ user.name if user and user.name else '' }}">
+							</div>
+							<div class="field">
+								<label>Email</label>
+								<input name="email" value="{{ user.email if user and user.email else '' }}">
+							</div>
+						</div>
+						<div class="grid-2">
+							<div class="field">
+								<label>Contact</label>
+								<input name="contact" value="{{ user.mobile if user and user.mobile else '' }}">
+							</div>
+							<div class="field">
+								<label>Password</label>
+								<input type="password" name="password" placeholder="••••••">
+							</div>
+						</div>
+						<div style="text-align:right;margin-top:10px;"><button class="btn btn-primary">Save Changes</button></div>
+					</form>
+				</div>
+
+				<div class="panel">
+					<h2>Notifications</h2>
+					<div class="notify-toggle">
+						<div>Price Drop Alerts</div>
+						<input id="nPriceDrop" type="checkbox" {{ 'checked' if (session.get('notifications') and session.get('notifications').get('price_drop')) else '' }}>
+					</div>
+					<div class="notify-toggle">
+						<div>Weekend Offers</div>
+						<input id="nWeekend" type="checkbox" {{ 'checked' if (session.get('notifications') and session.get('notifications').get('weekend_offers')) else '' }}>
+					</div>
+					<div class="notify-toggle">
+						<div>New Hotel Recommendations</div>
+						<input id="nNewRec" type="checkbox" {{ 'checked' if (session.get('notifications') and session.get('notifications').get('new_recommendations')) else '' }}>
+					</div>
+				</div>
+
+				<div class="panel">
+					<h2>Privacy Controls</h2>
+					<p class="muted-small">Manage your stored data on this device (demo).</p>
+					<div style="display:flex;gap:12px;margin-top:8px;">
+						<button id="clearHistory" class="btn btn-outline">Clear Search History</button>
+						<button id="deleteData" class="btn btn-outline">Delete Saved Data</button>
+					</div>
+				</div>
+			</div>
+
+			<div>
+				<div class="panel">
+					<h2>Theme Mode</h2>
+					<p class="muted-small">Choose your display mode.</p>
+					<div style="display:flex;gap:10px;margin-top:8px;">
+						<button id="themeRed" class="btn btn-primary">Red (Default)</button>
+						<button id="themeDark" class="btn btn-outline">Dark</button>
+					</div>
+				</div>
+
+				<div class="panel">
+					<h2>Help Center</h2>
+					<p class="muted-small">Ask a question and our team will get back to you (demo - stored locally).</p>
+					<form id="helpForm" class="form">
+						<label>Your question</label>
+						<textarea name="question" rows="3" required></textarea>
+						<div style="text-align:right;margin-top:8px;"><button class="btn btn-primary" type="submit">Send</button></div>
+					</form>
+					{% if help_requests %}
+						<h4 style="margin-top:12px;">Recent requests</h4>
+						<ul>
+							{% for r in help_requests %}
+								<li class="muted-small"><strong>{{ r.timestamp }}</strong> — {{ r.question }}</li>
+							{% endfor %}
+						</ul>
+					{% endif %}
+				</div>
+
+				<div class="panel">
+					<h2>Contact Us</h2>
+					<p class="muted-small">Head Office: InnoStay Labs, Chennai, India</p>
+					<p class="muted-small">Email: support@innostay.ai</p>
+					<p class="muted-small">Phone: {{ contact_number }}</p>
+					<p class="muted-small">Support Hours: 9 AM – 6 PM (Mon-Sat)</p>
+				</div>
+			</div>
+		</div>
+
+	<div style="margin-top:18px;text-align:center;color:var(--muted);">Last updated: {{ now_str }} | InnoStay Smart Preferences</div>
+	</main>
+
+	<footer class="footer">© 2025 InnoStay | Smart Preferences</footer>
+
+	<script>
+		// Theme controls (Red or Dark)
+		const themeRed = document.getElementById('themeRed');
+		const themeDark = document.getElementById('themeDark');
+		if (themeRed) themeRed.addEventListener('click', ()=> setTheme('red'));
+		if (themeDark) themeDark.addEventListener('click', ()=> setTheme('dark'));
+		function setTheme(t){
+			fetch('/settings/theme', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({theme:t}) })
+			.then(r=>r.json()).then(j=>{
+				if(j && j.status==='ok'){
+					if(j.theme==='dark') document.body.classList.add('dark'); else document.body.classList.remove('dark');
+				}
+			}).catch(()=>{});
+		}
+
+		// Notifications
+		const nPrice = document.getElementById('nPriceDrop');
+		const nWeekend = document.getElementById('nWeekend');
+		const nNewRec = document.getElementById('nNewRec');
+		function sendNotifications(){
+			fetch('/settings/notifications', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({
+				price_drop: !!(nPrice && nPrice.checked),
+				weekend_offers: !!(nWeekend && nWeekend.checked),
+				new_recommendations: !!(nNewRec && nNewRec.checked)
+			})}).then(()=>{}).catch(()=>{});
+		}
+		if(nPrice) nPrice.addEventListener('change', sendNotifications);
+		if(nWeekend) nWeekend.addEventListener('change', sendNotifications);
+		if(nNewRec) nNewRec.addEventListener('change', sendNotifications);
+
+		// Privacy
+		const clearBtn = document.getElementById('clearHistory');
+		const deleteBtn = document.getElementById('deleteData');
+		if(clearBtn) clearBtn.addEventListener('click', ()=>{
+			fetch('/settings/privacy', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({action:'clear_history'}) })
+			.then(r=>r.json()).then(j=>{ if(j && j.status==='ok') alert(j.message); location.reload(); }).catch(()=>alert('Failed'));
+		});
+		if(deleteBtn) deleteBtn.addEventListener('click', ()=>{
+			if(!confirm('Delete all saved data? This cannot be undone in demo.')) return;
+			fetch('/settings/privacy', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({action:'delete_data'}) })
+			.then(r=>r.json()).then(j=>{ if(j && j.status==='ok') alert(j.message); location.reload(); }).catch(()=>alert('Failed'));
+		});
+
+		// Help form
+		const helpForm = document.getElementById('helpForm');
+		if (helpForm) helpForm.addEventListener('submit', function(e){
+			e.preventDefault();
+			const data = new FormData(this);
+			fetch('/settings/help', { method: 'POST', body: data })
+			.then(r=>r.json()).then(j=>{ if(j && j.status==='ok'){ alert('Question received.'); location.reload(); } else alert('Failed to send.'); })
+			.catch(()=>alert('Failed to send.'));
+		});
+	</script>
+</body>
+</html>

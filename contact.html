@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>📞 Contact Us</title>
+	<link rel="stylesheet" href="/static/css/style.css?v=1">
+	<style>
+		.contact-row { display:grid; grid-template-columns: 1fr 320px; gap:16px; }
+		.info-box { background:var(--card); padding:16px; border-radius:10px; box-shadow:var(--shadow); }
+	</style>
+</head>
+<body>
+	<header class="header">
+		<div class="brand">InnoStay</div>
+		<nav class="nav">
+			<a href="/search" class="link">Search</a>
+			<a href="/settings" class="link">Settings</a>
+		</nav>
+	</header>
+
+	<main class="container">
+		<h1>📞 Contact Us</h1>
+		<p>Have questions or suggestions? We’d love to hear from you!</p>
+		<div class="contact-row">
+			<div>
+				<form id="contactForm" class="form">
+					<div class="grid-2">
+						<div>
+							<label>Name</label>
+							<input name="name" required>
+						</div>
+						<div>
+							<label>Email</label>
+							<input type="email" name="email" required>
+						</div>
+					</div>
+					<div>
+						<label>Message</label>
+						<textarea name="message" rows="6" required></textarea>
+					</div>
+					<div style="text-align:right;margin-top:8px;"><button class="btn btn-primary" type="submit">Send Message</button></div>
+				</form>
+			</div>
+			<div>
+				<div class="info-box">
+					<p>📍 Head Office: InnoStay Labs, Chennai, India</p>
+					<p>✉️ Email: support@innostay.ai</p>
+					<p>☎️ Phone: +91-98765-43210</p>
+					<p>🕐 Support Hours: 9 AM – 6 PM (Mon-Sat)</p>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<footer class="footer">Stay Connected with InnoStay – Smarter Travel, Better Prices.</footer>
+
+	<script>
+		const contactForm = document.getElementById('contactForm');
+		if(contactForm) contactForm.addEventListener('submit', function(e){
+			e.preventDefault();
+			const data = new FormData(this);
+			fetch('/contact', { method: 'POST', body: data })
+			.then(r=>r.json()).then(j=>{
+				if(j && j.status==='ok'){
+					alert('✅ Thank you for contacting InnoStay! We\'ll get back to you soon.');
+					this.reset();
+				} else {
+					alert('Failed to send message.');
+				}
+			}).catch(()=>alert('Failed to send message.'));
+		});
+	</script>
+</body>
+</html>

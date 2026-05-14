@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ hotel.name }} – Details</title>
+	<link rel="stylesheet" href="/static/css/style.css?v=1">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+	<header class="header">
+		<div class="brand">InnoStay</div>
+		<nav class="nav">
+			<a href="/logout" class="link">Logout</a>
+			<a href="/settings" class="link">Settings</a>
+			<a href="/search" class="link">Back to Search</a>
+		</nav>
+	</header>
+
+	<main class="container">
+		<section class="banner" style="background-image:url('{{ hotel.image }}')"></section>
+		<section class="card">
+			<div class="hotel-header">
+				<div>
+					<h1>{{ hotel.name }}</h1>
+					<p class="muted">{{ hotel.city }}</p>
+				</div>
+				<div class="price-rating">
+					<div class="rating">⭐ {{ '%.1f'|format(hotel.rating) }}</div>
+					<div class="price">₹ {{ hotel.price }}</div>
+				</div>
+			</div>
+			<div class="two-col">
+				<div>
+					<h3>Description</h3>
+					<p>
+						A contemporary property with warm hospitality and modern amenities. Enjoy comfort in our {{ hotel.room_type or 'Standard' }} rooms. Red-accent interiors align with the InnoStay design language.
+					</p>
+					<h3>Amenities</h3>
+					<p>
+						{{ (hotel.amenities or ['wifi','ac','breakfast']) | join(', ') }}
+					</p>
+				</div>
+				<div>
+					<h3>Nearby Attractions</h3>
+					<ul class="nearby">
+						<li>🛫 Near Airport: 3 km</li>
+						<li>🚉 Near Railway Station: 2 km</li>
+						<li>🚇 Metro Access: 1 km</li>
+						<li>🏙️ Popular Mall: 5 km</li>
+					</ul>
+					<button class="btn btn-primary" id="bookDetailBtn" data-hotel-id="{{ hotel.id }}">Book</button>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer class="footer">Created by [Neha, Nandika] – Foundation of AI Project.</footer>
+	<script>
+		(function(){
+			const btn = document.getElementById('bookDetailBtn');
+			if(!btn) return;
+			btn.addEventListener('click', async function(){
+				try {
+					const res = await fetch('/book', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ hotel_id: this.getAttribute('data-hotel-id') }) });
+					const data = await res.json();
+					if (data && data.status === 'confirmed' && data.booking_id) {
+						window.location.href = `/payment/${data.booking_id}`;
+					} else {
+						const t = document.createElement('div');
+						t.className = 'toast';
+						t.textContent = 'Booking failed';
+						document.body.appendChild(t);
+						setTimeout(()=>t.remove(), 3000);
+					}
+				} catch(e){
+					const t = document.createElement('div');
+					t.className = 'toast';
+					t.textContent = 'Booking failed';
+					document.body.appendChild(t);
+					setTimeout(()=>t.remove(), 3000);
+				}
+			});
+		})();
+	</script>
+</body>
+</html>
+
+
